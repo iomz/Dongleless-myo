@@ -86,10 +86,10 @@ class cmd(object):
 
 	@property
 	def data(self):
-		return bytearray([chr(self.cmd), chr(len(self))]) + self.bytearray()
+		return bytearray([self.cmd, len(self)]) + self.bytearray()
 
 	def bytearray(self):
-		return bytearray([chr(i) for i in self.value])
+		return bytearray([i for i in self.value])
 
 	def __len__(self):
 		return len(self.value)

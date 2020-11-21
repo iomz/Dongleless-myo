@@ -22,14 +22,12 @@ Provides a 3 dimensional vector class.
 """
 
 import math
-import six
 
 
 class Vector(object):
+    __slots__ = ("x", "y", "z")
 
-    __slots__ = ('x', 'y', 'z')
-
-    def __init__(self, x=0., y=0., z=0.):
+    def __init__(self, x=0.0, y=0.0, z=0.0):
         super(Vector, self).__init__()
         self.x = float(x)
         self.y = float(y)
@@ -42,7 +40,7 @@ class Vector(object):
         product.
         """
 
-        if isinstance(rhs, (six.integer_types, float)):
+        if isinstance(rhs, (int, float)):
             return Vector(self.x * rhs, self.y * rhs, self.z * rhs)
         else:
             return self.dot(rhs)
@@ -52,7 +50,7 @@ class Vector(object):
         Adds *self* to *rhs* and returns a new vector.
         """
 
-        if isinstance(rhs, (six.integer_types, float)):
+        if isinstance(rhs, (int, float)):
             return Vector(self.x + rhs, self.y + rhs, self.z + rhs)
         else:
             return Vector(self.x + rhs.x, self.y + rhs.y, self.z + rhs.z)
@@ -62,7 +60,7 @@ class Vector(object):
         Substracts *self* from *rhs* and returns a new vector.
         """
 
-        if isinstance(rhs, (six.integer_types, float)):
+        if isinstance(rhs, (int, float)):
             return Vector(self.x - rhs, self.y - rhs, self.z - rhs)
         else:
             return Vector(self.x - rhs.x, self.y - rhs.y, self.z - rhs.z)
@@ -71,9 +69,9 @@ class Vector(object):
         return iter((self.x, self.y, self.z))
 
     def __repr__(self):
-        return 'Vector({0}, {1}, {2})'.format(round(self.x, 4),
-            round(self.y, 4),
-            round(self.z, 4))
+        return "Vector({0}, {1}, {2})".format(
+            round(self.x, 4), round(self.y, 4), round(self.z, 4)
+        )
 
     def __invert__(self):
         """
@@ -122,7 +120,8 @@ class Vector(object):
         return Vector(
             self.y * rhs.z - self.z * rhs.y,
             self.z * rhs.x - self.x * rhs.z,
-            self.x * rhs.y - self.y * rhs.x)
+            self.x * rhs.y - self.y * rhs.x,
+        )
 
     def angle_to(self, rhs):
         """

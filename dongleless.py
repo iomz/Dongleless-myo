@@ -24,7 +24,8 @@ from quaternion import Quaternion
 # If the Myo is unsynced while the program is running, you will need to plug it in and let it fall asleep before poses will work again.
 # Mixes up fist and wave in when worn on left arm with led toward elbow
 
-logging.basicConfig(filename='myo.log', level=logging.DEBUG)
+# logging.basicConfig(filename='myo.log', level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG)
 
 
 class MyoState:
@@ -227,7 +228,7 @@ class MyoDevice(btle.DefaultDelegate):
 		self.myo = MyoState(self.connection)
 
 		self.connection.vibrate(1)
-		
+
 		self.myo.arm = md.arm(-1)
 		self.myo.pose = md.pose(-1)
 		self.myo.x_direction = md.x_direction(-1)
@@ -253,7 +254,6 @@ class MyoDevice(btle.DefaultDelegate):
 					self.myo.pose = md.pose(-1)
 					self.myo.x_direction = md.x_direction(-1)
 					self.myo.startq = Quaternion(0, 0, 0, 1)
-					return
 				else:
 					self.myo.napq = self.myo.imu.quat.copy()
 					self.on_pose(self.myo)
@@ -268,7 +268,6 @@ class MyoDevice(btle.DefaultDelegate):
 					self.myo.startq = self.myo.imu.quat.copy()
 
 					self.on_sync(self.myo)
-					return
 
 				elif ev_type == ev_type.UNSYNC:
 					self.myo.synced = False
@@ -278,7 +277,6 @@ class MyoDevice(btle.DefaultDelegate):
 					self.myo.startq = Quaternion(0, 0, 0, 1)
 
 					self.on_unsync(self.myo)
-					return
 
 				elif ev_type == ev_type.UNLOCK:
 					self.on_unlock(self.myo)
@@ -353,14 +351,18 @@ def getMyo(mac=None):
 				if i.addr == mac:
 					return str(mac).upper()
 			cnt += 1
-			logging.info('Try #' + str(cnt))
+			logging.info('Try #%s', cnt)
 
 	while True:
-		for i in btle.Scanner(0).scan(1):
-			for j in i.getScanData():
-				if j[0] == 6 and j[2] == '4248124a7f2c4847b9de04a9010006d5':
+		scan_result = btle.Scanner(0).scan(1)
+		for i in scan_result:
+			logging.info('scan device: %s', i.addr)
+			scan_data = i.getScanData()
+			for num, name, data in scan_data:
+				if num == 6 and data == 'd5060001-a904-deb9-4748-2c7f4a124842':
 					return str(i.addr).upper()
-		logging.info('Try #' + str(cnt))
+		cnt += 1
+		logging.info('Try #%s', cnt)
 
 
 def run():
