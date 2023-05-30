@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright (c) 2015  Niklas Rosenstein
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -69,9 +70,7 @@ class Vector(object):
         return iter((self.x, self.y, self.z))
 
     def __repr__(self):
-        return "Vector({0}, {1}, {2})".format(
-            round(self.x, 4), round(self.y, 4), round(self.z, 4)
-        )
+        return "Vector({0}, {1}, {2})".format(round(self.x, 4), round(self.y, 4), round(self.z, 4))
 
     def __invert__(self):
         """
@@ -95,7 +94,7 @@ class Vector(object):
         Return the magnitude of this vector.
         """
 
-        return math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
+        return math.sqrt(self.x**2 + self.y**2 + self.z**2)
 
     def normalized(self):
         """
