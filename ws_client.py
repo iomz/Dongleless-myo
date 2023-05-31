@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""dongleless-ble example ws_host.py"""
+"""dl-myo example ws_host.py"""
 
 import argparse
 import asyncio
@@ -19,7 +19,7 @@ async def main():
     args = parser.parse_args()
 
     uri = f"ws://{args.address}:{args.port}"
-    async with websockets.connect(uri) as websocket:
+    async with websockets.connect(uri) as websocket:  # pyright: ignore
         while True:
             action = input("enter action: ")
             payload = json.dumps({"action": action})

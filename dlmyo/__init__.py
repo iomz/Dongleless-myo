@@ -10,4 +10,4 @@ Authors:
 ~~~~~~~~~~~~~~~~~~~~
    >>> import dlmyo
 """
-from .dongleless import *
+from .myo_device import *

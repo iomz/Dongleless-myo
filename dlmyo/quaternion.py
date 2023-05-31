@@ -33,7 +33,7 @@ Roll, Pitch and Yaw: http://answers.unity3d.com/questions/416169/finding-pitchro
 
 import math
 
-from vector import Vector
+from .vector import Vector
 
 
 class Quaternion(object):
