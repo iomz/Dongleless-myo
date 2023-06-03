@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .myo_enum import *
+from .constants import *
 
 
 class Command(object):

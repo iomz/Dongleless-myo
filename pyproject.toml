@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "dlmyo"
+name = "dl-myo"
 version = "0.0.2"
 authors = [
   { name="Max Leefer" },
@@ -24,7 +24,7 @@ classifiers = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/iomz/dlmyo"
-"Bug Tracker" = "https://github.com/iomz/dlmyo/issues"
+"Homepage" = "https://github.com/iomz/dl-myo"
+"Bug Tracker" = "https://github.com/iomz/dl-myo/issues"
 
 [tool]

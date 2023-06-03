@@ -9,10 +9,38 @@ import time
 
 from bluepy import btle
 
-from .myo_enum import *
-from .myo_services import Services
-from .myo_state import *
+from .constants import *
+from .state import *
 from .quaternion import Quaternion
+
+Services = {
+    0x1800: "InfoService",
+    0x2A00: "Name",
+    0x2A01: "Info1",
+    0x2A04: "Info2",
+    0x180F: "BatteryService",
+    0x2A19: "BatteryLevel",
+    0x0001: "ControlService",  # < Myo info service
+    0x0101: "HardwareInfo",  # < Serial number for this Myo and various parameters which
+    # < are specific to this firmware. Read-only attribute.
+    # < See myohw_fw_info_t.
+    0x0201: "FirmwareVersion",  # < Current firmware version. Read-only characteristic.
+    # < See myohw_fw_version_t.
+    0x0401: "Command",  # < Issue commands to the Myo. Write-only characteristic.
+    # < See myohw_command_t.
+    0x0002: "ImuDataService",  # < IMU service
+    0x0402: "IMUData",  # < See myohw_imu_data_t. Notify-only characteristic. /*
+    0x0502: "MotionEvent",  # < Motion event data. Indicate-only characteristic. /*
+    0x0003: "ClassifierService",  # < Classifier event service.
+    0x0103: "ClassifierEvent",  # < Classifier event data. Indicate-only characteristic. See myohw_pose_t. /***
+    0x0005: "EmgDataService",  # < Raw EMG data service.
+    0x0105: "EmgData1",  # < Raw EMG data. Notify-only characteristic.
+    0x0205: "EmgData2",  # < Raw EMG data. Notify-only characteristic.
+    0x0305: "EmgData3",  # < Raw EMG data. Notify-only characteristic.
+    0x0405: "EmgData4",  # < Raw EMG data. Notify-only characteristic.
+    0x180A: "CompanyService",
+    0x2A29: "CompanyName",
+}
 
 
 class Connection(btle.Peripheral):
@@ -134,15 +162,14 @@ class Connection(btle.Peripheral):
         [logoR, logoG, logoB], [lineR, lineG, lineB] or
         [logoR, logoG, logoB, lineR, lineG, lineB]"""
 
-        if len(args) == 1:
-            args = args[0]
+        if not isinstance(args, tuple) or len(args) != 2:
+            raise Exception(f"Unknown payload for LEDs: {args}")
 
-        if len(args) == 2:
-            payload = LED(args[0], args[1])
-        elif len(args) == 6:
-            payload = LED(args[0:3], args[3:6])
-        else:
-            raise Exception("Unknown payload for LEDs")
+        for l in args:
+            if any(not isinstance(v, int) for v in l):
+                raise Exception(f"Values must be int 0-255: {l}")
+
+        payload = LED(args[0], args[1])
         self.writeCharacteristic(0x19, payload.data, True)
 
     def subscribe(self):
@@ -206,8 +233,8 @@ class MyoDevice(btle.DefaultDelegate):
                 ev_type = ClassifierEvent(data[0])
             except:
                 raise Exception("Unknown classifier event: " + str(data[0]))
-            if ev_type == ev_type.POSE:
-                self.state.pose = pose(data[1])  # pyright: ignore
+            if ev_type == ClassifierEvent.POSE:
+                self.state.pose = Pose(data[1])  # pyright: ignore
                 if self.state.pose == Pose.UNSYNC:
                     self.state.synced = False
                     self.state.arm = Arm.UNSYNC
@@ -218,15 +245,15 @@ class MyoDevice(btle.DefaultDelegate):
                     self.state.napq = self.state.imu.quat.copy()
                     self.on_pose(self.state)
 
-            elif ev_type == ev_type.SYNC:
+            elif ev_type == ClassifierEvent.SYNC:
                 self.state.synced = True
                 # rewrite handles
-                self.state.arm = arm(data[1])  # pyright: ignore
-                self.state.x_direction = x_direction(data[2])  # pyright: ignore
+                self.state.arm = Arm(data[1])  # pyright: ignore
+                self.state.x_direction = XDirection(data[2])  # pyright: ignore
                 self.state.startq = self.state.imu.quat.copy()
                 self.on_sync(self.state)
 
-            elif ev_type == ev_type.UNSYNC:
+            elif ev_type == ClassifierEvent.UNSYNC:
                 self.state.synced = False
                 self.state.arm = Arm.UNSYNC
                 self.state.x_direction = XDirection.UNSYNC
@@ -234,17 +261,17 @@ class MyoDevice(btle.DefaultDelegate):
                 self.state.startq = Quaternion(0, 0, 0, 1)
                 self.on_unsync(self.state)
 
-            elif ev_type == ev_type.UNLOCK:
+            elif ev_type == ClassifierEvent.UNLOCK:
                 self.on_unlock(self.state)
 
-            elif ev_type == ev_type.LOCK:
+            elif ev_type == ClassifierEvent.LOCK:
                 self.on_lock(self.state)
 
-            elif ev_type == ev_type.SYNCFAIL:
+            elif ev_type == ClassifierEvent.SYNCFAIL:
                 self.state.synced = False
                 self.on_sync_failed(self.state)
 
-            elif ev_type == ev_type.WARMUP:
+            elif ev_type == ClassifierEvent.WARMUP:
                 self.on_warmup(self.state)
 
         elif handle_enum == Handle.IMU:
@@ -267,7 +294,7 @@ class MyoDevice(btle.DefaultDelegate):
         pass
 
     def on_emg(self, state):  # callback
-        logging.info(state.imu)
+        logging.info(state.emg)
         pass
 
     def on_pose(self, state):  # callback

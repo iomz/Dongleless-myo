@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""dl-myo example ws_host.py"""
+"""dl-myo example ws_client.py"""
 
 import argparse
 import asyncio
@@ -21,7 +21,7 @@ async def main():
     uri = f"ws://{args.address}:{args.port}"
     async with websockets.connect(uri) as websocket:  # pyright: ignore
         while True:
-            action = input("enter action: ")
+            action = input("[start|stop|warmup]: ")
             payload = json.dumps({"action": action})
 
             await websocket.send(payload)

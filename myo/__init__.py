@@ -10,4 +10,4 @@ Authors:
 ~~~~~~~~~~~~~~~~~~~~
    >>> import dlmyo
 """
-from .myo_device import *
+from .device import *

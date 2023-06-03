@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from .myo_command import *
-from .myo_enum import *
+from .command import *
+from .constants import *
 from .vector import Vector
 from .quaternion import Quaternion
 

@@ -1,6 +1,6 @@
-# dlmyo (Dongleless Myo)
+# dl-myo (Dongleless Myo)
 
-This project was originally created by [@mamo91](https://github.com/mamo91/Dongleless-myo), enhanced by [@MyrikLD](https://github.com/MyrikLD/Dongleless-myo), and reimplemented as dlmyo.
+This project was originally created by [@mamo91](https://github.com/mamo91/Dongleless-myo), enhanced by [@MyrikLD](https://github.com/MyrikLD/Dongleless-myo), and reimplemented as dl-myo.
 
 If you are fed up with the dongle and still need to use Myo anyway here's the right stuff to grab.
 
