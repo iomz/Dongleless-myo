@@ -1,6 +1,6 @@
-# dl-myo (Dongleless Myo)
+This project was originally created by [@mamo91](https://github.com/mamo91/Dongleless-myo), enhanced by [@MyrikLD](https://github.com/MyrikLD/Dongleless-myo), and I reimplemented it with Bleak: [dl-myo](https://github.com/iomz/dl-myo)
 
-This project was originally created by [@mamo91](https://github.com/mamo91/Dongleless-myo), enhanced by [@MyrikLD](https://github.com/MyrikLD/Dongleless-myo), and reimplemented as dl-myo.
+# donglelessl-myo (Dongleless Myo)
 
 If you are fed up with the dongle and still need to use Myo anyway here's the right stuff to grab.
 
@@ -8,14 +8,10 @@ If you are fed up with the dongle and still need to use Myo anyway here's the ri
 
 Install bluez and [bluepy](https://github.com/IanHarvey/bluepy), and run the bluepy test program to make sure it works.
 
-```bash
-
-```
-
 ## Limitations
 
 - Tested only on Linux OS
-- [TODO] Can't provide EMG and pose data at the same time.
+- Can't provide EMG and pose data at the same time.
 
 ## Usage
 
@@ -51,9 +47,3 @@ or
 ```
 sudo rfkill block 0 && sudo rfkill unblock 0
 ```
-
-## Authors
-
-- [@mamo91](https://github.com/mamo91)
-- [@MyrikLD](https://github.com/MyrikLD)
-- [@iomz](https://github.com/iomz)

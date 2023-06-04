@@ -1,9 +1,0 @@
-version: "3.9"
-services:
-  dongleless-myo:
-    build: .
-    image: iomz/dongleless-myo:latest
-    container_name: dongleless-myo
-    network_mode: host
-    privileged: true
-    restart: unless-stopped
